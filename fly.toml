@@ -1,0 +1,16 @@
+app = "asianchatbot"
+
+[env]
+BOT_TOKEN = "8116470352:AAFFlDQpqqDad5ZHYvsG6px0pWBPNmnB9l4"
+GROUP_ID = "-1002513778734"
+
+[build]
+  image = "python:3.10"
+
+[[services]]
+  internal_port = 8080
+  protocol = "tcp"
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]

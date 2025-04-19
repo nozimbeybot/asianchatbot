@@ -68,3 +68,24 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "ru": "Я вас понял!",
         "tr": "Sizi anladım!"
     }
+    await update.message.reply_text(reply[lang])
+
+async def main():
+    app = ApplicationBuilder().token(BOT_TOKEN).build()
+
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("help", help_command))
+    app.add_handler(CommandHandler("motivate", motivate))
+    app.add_handler(CommandHandler("quote", quote))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
+
+    # Hourly greetings uchun scheduler qo‘shamiz
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(send_hourly_greetings, 'cron', minute=0, args=[app])
+    scheduler.start()
+
+    await app.run_polling()
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())

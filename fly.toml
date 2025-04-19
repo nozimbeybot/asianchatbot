@@ -1,16 +1,9 @@
 app = "asianchatbot"
+primary_region = "ams"
 
 [build]
-  image = "python:3.10-slim"
+  dockerfile = "Dockerfile"
 
-[[services]]
-  internal_port = 8080
-  protocol = "tcp"
-
-  [[services.ports]]
-    handlers = ["http"]
-    port = 80
-
-  [[services.ports]]
-    handlers = ["tls", "http"]
-    port = 443
+[env]
+  BOT_TOKEN = "8116470352:AAFFlDQpqqDad5ZHYvsG6px0pWBPNmnB9l4"
+  GROUP_ID = "-1002513778734"

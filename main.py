@@ -92,3 +92,6 @@ async def main():
 if __name__ == "__main__":
     import asyncio
     asyncio.run(main())
+@bot.message_handler(content_types=['new_chat_members'])
+def welcome_new_member(message):
+    bot.send_message(message.chat.id, f"Guruh ID: {message.chat.id}")

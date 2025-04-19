@@ -1,6 +1,0 @@
-{
-  "name": "asianchat-bot",
-  "type": "python",
-  "src": ".",
-  "run": "python3 main.py"
-}

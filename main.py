@@ -1,8 +1,7 @@
 import logging
 import random
-import time
 import datetime
-import threading
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, MessageHandler, filters
 
@@ -35,14 +34,9 @@ def detect_language(text):
         return "uz"
 
 async def send_hourly_greetings(app):
-    while True:
-        now = datetime.datetime.now()
-        if now.minute == 0:
-            lang = random.choice(["uz", "ru", "tr"])
-            text = random.choice(greetings[lang])
-            await app.bot.send_message(chat_id=GROUP_ID, text=text)
-            time.sleep(60)
-        time.sleep(10)
+    lang = random.choice(["uz", "ru", "tr"])
+    text = random.choice(greetings[lang])
+    await app.bot.send_message(chat_id=GROUP_ID, text=text)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     lang = detect_language(update.message.text)
@@ -74,21 +68,3 @@ async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "ru": "Я вас понял!",
         "tr": "Sizi anladım!"
     }
-    await update.message.reply_text(reply[lang])
-
-async def main():
-    app = ApplicationBuilder().token(BOT_TOKEN).build()
-
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("help", help_command))
-    app.add_handler(CommandHandler("motivate", motivate))
-    app.add_handler(CommandHandler("quote", quote))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
-
-    threading.Thread(target=lambda: app.create_task(send_hourly_greetings(app)), daemon=True).start()
-
-    await app.run_polling()
-
-if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())

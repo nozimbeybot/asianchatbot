@@ -1,0 +1,6 @@
+services:
+  - type: worker
+    name: asianchat-bot
+    env: python
+    buildCommand: ""
+    startCommand: "python main.py"
